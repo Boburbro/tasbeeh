@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tasbeeh/data/local/local_database_service.dart';
 import 'package:tasbeeh/presentations/home/home_screen.dart';
 
-void main() {
+void main() async {
+  final dbService = LocalDatabaseService();
+
   runApp(const MainApp());
 }
 
