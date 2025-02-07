@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tasbeeh/presentations/tasks/tasks_screen.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -40,6 +42,10 @@ class HomeDrawer extends StatelessWidget {
             Card(
               color: Colors.deepPurpleAccent,
               child: ListTile(
+                onTap: () {
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_) => TasksScreen()));
+                },
                 leading: Icon(
                   Icons.task_alt_rounded,
                   color: Theme.of(context).iconTheme.color,

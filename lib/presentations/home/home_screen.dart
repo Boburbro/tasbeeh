@@ -1,6 +1,8 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tasbeeh/cubits/task_cubit.dart';
+import 'package:tasbeeh/presentations/home/widgets/animated_button.dart';
 import 'package:tasbeeh/presentations/home/widgets/home_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,16 +13,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _count = 0;
-
-  final player = AudioPlayer();
-
-  double _size = 100;
-
-  int _dayPlan = 1000;
-  int _dayCount = 0;
-
   final AdvancedDrawerController _controller = AdvancedDrawerController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TaskCubit>().loadTasks();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(
-            "$_dayCount/$_dayPlan",
+            "_dayCount/_dayPlan",
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
@@ -61,11 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () {
-                setState(() {
-                  _count = 0;
-                });
-              },
+              onPressed: () {},
               icon: Icon(
                 Icons.restart_alt,
                 color: Theme.of(context).iconTheme.color,
@@ -73,36 +68,24 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        body: Center(
-          child: GestureDetector(
-            onTap: () async {
-              await player.play(AssetSource("click.wav"));
-              setState(() {
-                _count++;
-                _dayCount++;
-              });
-              setState(() {
-                _size = 100;
-              });
-            },
-            onTapDown: (details) {
-              setState(() {
-                _size = 70;
-              });
-            },
-            child: CircleAvatar(
-              radius: _size,
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Text(
-                _count.toString(),
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
+        body: BlocBuilder<TaskCubit, TaskState>(
+          builder: (context, state) {
+            return Center(
+              child: AnimatedButton(
+                onTap: () {
+                  context.read<TaskCubit>().incrementCount();
+                },
+                child: Text(
+                  state.count.toString(),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

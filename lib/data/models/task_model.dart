@@ -33,7 +33,7 @@ class Task extends Equatable {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{
-      'plan_dat': planDay,
+      'plan_day': planDay,
       'count': count,
       'title': title,
       'description': description,
@@ -77,14 +77,17 @@ class Task extends Equatable {
         endTime: DateTime.fromMillisecondsSinceEpoch(0),
       );
 
+  static List<Task> fromList(List? list) =>
+      list?.map((e) => Task.fromJson(e)).toList() ?? [];
+
   @override
   String toString() {
-    return '''Task{
-    id: $id, planDay: $planDay, 
-    count: $count, title: $title, 
-    description: $description, 
-    startTime: $startTime, endTime: $endTime}
-  ''';
+    return '''\nTask{
+  id: $id, planDay: $planDay, 
+  count: $count, title: $title, 
+  description: $description, 
+  startTime: $startTime, endTime: $endTime
+}''';
   }
 
   @override
